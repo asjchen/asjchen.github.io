@@ -98,18 +98,10 @@ uglyURLs = false
 # Author’s information
 [author]
     # Name
-    name = "reuixiy"
-    # Email
-    email = "reuixiy@gmail.com"
-    # Motto or introduction
-    motto = "Viva La Vida"
+    name = "Andy Chen"
     # Avatar
     avatar = "/icons/apple-touch-icon.png"
-    # Personal website, default: baseURL
-    website = "https://io-oi.me/"
-    # Twitter
-    twitter = "reuixiy"
-
+    
 # Related content
 [related]
     threshold = 80
@@ -367,8 +359,6 @@ uglyURLs = false
     # ATTENTION: keep this format, change
     #            the number
 
-    siteTwitter = "reuixiy"
-    # Note: used for Twitter Cards
 
 
     ######################################

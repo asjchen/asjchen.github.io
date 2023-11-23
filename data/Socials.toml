@@ -1,0 +1,13 @@
+[[socials]]
+    id = "github"
+    url = "https://github.com/asjchen"
+    icon = "github"
+    title = "GitHub"
+    weight = 1
+
+[[socials]]
+    id = "linkedin"
+    url = "https://www.linkedin.com/in/asjchen"
+    icon = "linkedin"
+    title = "LinkedIn"
+    weight = 2

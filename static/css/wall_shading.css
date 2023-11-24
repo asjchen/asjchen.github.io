@@ -1,0 +1,14 @@
+#wall-words {
+    text-transform: uppercase;
+    word-spacing: 6px;
+    text-align: center;
+}
+
+#wall-topics {
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.highlight {
+    color: blue;
+} 

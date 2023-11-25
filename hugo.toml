@@ -208,31 +208,19 @@ uglyURLs = false
         pre = "internal"
         post = "archive"
     [[menu.main]]
-        pageref = "/categories/"
-        name = "Categories"
-        weight = 3
-        pre = "internal"
-        post = "th"
-    [[menu.main]]
-        pageref = "/tags/"
-        name = "Tags"
-        weight = 4
-        pre = "internal"
-        post = "tags"
-    [[menu.main]]
         pageref = "/about/"
         name = "About"
-        weight = 5
+        weight = 3
         pre = "internal"
         post = "user-circle"
     [[menu.main]]
-        weight = 6
+        weight = 4
         identifier = "theme-switcher"
     [[menu.main]]
-        weight = 7
+        weight = 5
         identifier = "lang-switcher"
     [[menu.main]]
-        weight = 8
+        weight = 6
         identifier = "search"
         post = "search"
 
@@ -523,7 +511,7 @@ uglyURLs = false
     ######################################
     # Dark Mode
 
-    enableDarkMode = true
+    enableDarkMode = false
 
     defaultTheme = "light"
     # Note: light or dark
@@ -835,17 +823,17 @@ uglyURLs = false
     displayModifiedDate = true
     modifiedDateIcon = "calendar-check"
 
-    displayExpiredDate = true
+    displayExpiredDate = false
     expiredDateIcon = "calendar-times"
 
-    displayCategory = true
+    displayCategory = false
     categoryIcon = "folder"
     categoryDelimiter = "/"
 
-    displayWordCount = true
+    displayWordCount = false
     wordCountIcon = "pencil-alt"
 
-    displayReadingTime = true
+    displayReadingTime = false
     readingTimeIcon = "clock"
 
     displayBusuanziPagePV = false
@@ -1128,7 +1116,7 @@ uglyURLs = false
 
     enablePostCopyright = true
 
-    displayPostCopyright = true
+    displayPostCopyright = false
     # Note: *global settings*
     #       `displayCopyright` in post’s Front Matter
     #       has a higher priority than here
@@ -1181,7 +1169,7 @@ uglyURLs = false
     ######################################
     # Post Share
 
-    enablePostShare = true
+    enablePostShare = false
 
     displayPostShare = true
     # Note: *global settings*
@@ -1190,7 +1178,7 @@ uglyURLs = false
 
     displayShareOnText = false
 
-    postShareItems = ["facebook", "mastodon", "fediverse", "twitter", "linkedin", "telegram", "weibo", "douban", "qq", "qzone", "pocket", "hackernews", "qrcode", "email"]
+    postShareItems = []
 
     # Fetch fediverse instances list for
     # input suggestions

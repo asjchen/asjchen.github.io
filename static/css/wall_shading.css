@@ -2,6 +2,7 @@
     text-transform: uppercase;
     word-spacing: 6px;
     text-align: center;
+    font-size: 14px;
 }
 
 #wall-topics {
@@ -9,6 +10,7 @@
     text-align: center;
 }
 
-.highlight {
-    color: blue;
+#wall .highlight {
+    color: var(--color-primary);
+    font-size: unset;
 } 

@@ -8,6 +8,7 @@
 #wall-topics {
     text-transform: uppercase;
     text-align: center;
+    font-size: 14px;
 }
 
 #wall .highlight {

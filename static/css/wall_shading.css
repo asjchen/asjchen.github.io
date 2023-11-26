@@ -11,7 +11,10 @@
     font-size: 14px;
 }
 
-#wall .highlight {
+#wall .highlight-text {
     color: var(--color-primary);
-    font-size: unset;
+} 
+
+#wall .fade-text {
+    color: var(--color-contrast-low);
 } 

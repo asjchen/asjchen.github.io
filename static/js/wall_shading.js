@@ -18,4 +18,4 @@ function highlightCategory() {
     $('#wall-topics').addClass('fade-text');
 }
 
-window.setInterval(highlightCategory, 700);
+window.setInterval(highlightCategory, 2000);

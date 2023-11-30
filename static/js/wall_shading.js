@@ -6,16 +6,14 @@ function highlightCategory() {
         if ($('#wall').hasClass(topicList[topicIdx])) {
             currIdx = topicIdx;
             $('.' + topicList[topicIdx]).removeClass('highlight-text');
-            $('#wall-words').removeClass('fade-text');
-            $('#wall-topics').removeClass('fade-text');
             $('#wall').removeClass(topicList[topicIdx])
         }
     }
     currIdx = (currIdx + 1) % topicList.length;
     $('#wall').addClass(topicList[currIdx])
     $('.' + topicList[currIdx]).addClass('highlight-text');
-    $('#wall-words').addClass('fade-text');
-    $('#wall-topics').addClass('fade-text');
 }
 
+// It takes a bit of time to load the content, so we put an initial delay on top of the interval.
+window.setTimeout(highlightCategory, 500);
 window.setInterval(highlightCategory, 2000);

@@ -18,7 +18,7 @@ Before we jump into the rabbit-hole exploring this lag, I should preface that:
 
 - We focus on the ML problem and less on how speech separation gets productionized in hearing devices, which I know much less about!
 - We aren’t diving into a comprehensive literature review of speech separation; we are focusing on models pre-transformer era, as these older models help us understand fundamental aspects of this problem.
-- The remainder of this post assumes a moderate understanding of deep learning. We can skip to the [summary table](https://www.notion.so/Lost-at-the-Cocktail-Party-A-Rabbit-Hole-into-Speech-Separation-daeef3bcad0d4fbaa0f5a180b517e25d?pvs=21) at the end if the technical details aren’t of interest!
+- The remainder of this post assumes a moderate understanding of deep learning. We can skip to the [side-by-side comparison section]({{< ref "#side-by-side-comparison" >}}) at the end if the technical details aren’t of interest!
 
 ## Background
 In this version of the cocktail party problem, we assume we have $C$ speakers (with $C$ known in advance) talking simultaneously to produce a mixed signal: a single time series of decimal numbers. (In other words, we’re working with mono audio, not stereo audio.) Given this mixed signal, our goal is to separate it back into the individual speakers’ signals. In a hearing device scenario, we then decide how to reconstruct “cleaner” audio that’s helpful for the device user; for example, we could amplify the loudest speakers and mute the remaining speakers.

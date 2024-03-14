@@ -605,7 +605,7 @@ uglyURLs = false
     ######################################
     # MathJax (chemical equation supported)
 
-    enableMathJax = false
+    enableMathJax = true
     # Note: *global settings*
     #       `mathjax` in post’s Front Matter
     #       has a higher priority than here
@@ -833,7 +833,7 @@ uglyURLs = false
     displayWordCount = false
     wordCountIcon = "pencil-alt"
 
-    displayReadingTime = false
+    displayReadingTime = true
     readingTimeIcon = "clock"
 
     displayBusuanziPagePV = false

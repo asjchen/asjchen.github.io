@@ -12,7 +12,7 @@ To a smaller extent, I myself also struggle with this issue. Until 2nd grade, I 
 
 <audio controls src="/audio/2024-03-13-cocktail-party/sample-conversation.mp3"></audio>
 
-In the machine learning (ML) world, this problem of separating voices (perhaps to amplify the important ones) is called the *cocktail party problem.* The literature is rife with obstacles in audio processing, stable model training, etc, but the story that stands out revolves around *lag*: how much audio needs to elapse before speech separation can start?*
+In the machine learning (ML) world, this problem of separating voices (perhaps to amplify the important ones) is called the *cocktail party problem.* The literature is rife with obstacles in audio processing, stable model training, etc, but the story that stands out revolves around *lag*: how much audio needs to elapse before speech separation can start?[^1]
 
 Before we jump into the rabbit-hole exploring this lag, I should preface that:
 
@@ -39,7 +39,7 @@ Breaking a raw audio signal into its time-frequency components offers a more int
 
 ![Separated Spectrogram](/images/2024-03-13-cocktail-party/separated_spectrogram.png)
 
-In the context of the speech separation problem, the time-frequency domain representation has a similar setup as the time domain version; we have a mixture signal that’s a sum of source signals. To convert the time-frequency signal back to the time domain signal, we can apply an inverse STFT*:
+In the context of the speech separation problem, the time-frequency domain representation has a similar setup as the time domain version; we have a mixture signal that’s a sum of source signals. To convert the time-frequency signal back to the time domain signal, we can apply an inverse STFT[^2]:
 $$
 \begin{align*}
 \mathcal{X}(f,t) &:= STFT(\mathbf{x}(t)) \\\\ \mathcal{X}(f,t) &= \sum_{i=1}^C \mathcal{S}_i(f,t) \\\\ \mathbf{s}_i(t) &= STFT^{-1}(\mathcal{S}_i(f,t))
@@ -61,7 +61,7 @@ Researchers measure speech separation models with scale-invariant signal-to-nois
     
     The units are decibels, as they’re also on the log-10 scale!
     
-- Scale-invariant SNR (SI-SNR): to make the metric insensitive to amplitude, we can instead look at the orthogonal projection of $\hat{s}$ onto $s$’s line.
+- Scale-invariant SNR (SI-SNR): to make the metric [insensitive to amplitude](https://arxiv.org/pdf/1811.02508.pdf), we can instead look at the orthogonal projection of $\hat{s}$ onto $s$’s line.
     
     $$
     SI\text{-}SNR(\mathbf{s}, \hat{\mathbf{s}}) := 10\log_{10}\frac{||\alpha \mathbf{s}||^2}{||\alpha \mathbf{s} - \hat{\mathbf{s}}||^2}\text{ for } \alpha = \frac{\langle \mathbf{s}, \hat{\mathbf{s}} \rangle}{||\mathbf{s}||^2}
@@ -112,9 +112,9 @@ where $\mathbf{v}_j$ is an embedded point (mapped from a TF bin), $y_j \in \{1,\
 
 In this form, the training is not quite end-to-end; it doesn’t involve the clustering step because it is not differentiable and therefore doesn’t produce feasible gradients. That means the model is not actually optimized for speaker separation; for instance, it treats TF bins with low signal (like silence regions) with the same weight as TF bins with high signal. To address this issue, we can follow-up with **[DPCL++](https://arxiv.org/pdf/1607.02173.pdf)**; among other improvements, this sequel replaces the k-means with a “soft k-means”. Instead of assigning each TF bin with a strict assignment to a single speaker, we provide a probability distribution over the possible speakers. During training, we can then train an end-to-end model by backpropagating through the soft k-mean iterations.
 
-This architecture serves as a nice fundamental model because we can easily visualize how the model assigns speaker labels to the TF bins. However, this approach also requires 100 frames at a time because we need enough embedded points to form clusters. However, this translates to ~824ms (32 ms for 1st frame, and then 8 ms for the remaining 99 frames), which means we need to wait for that lag before starting speaker assignment. That makes DPCL and its variants ill-suited for hearing devices, which need real-time computation.
+This architecture serves as a nice fundamental model because we can easily visualize how the model assigns speaker labels to the TF bins. However, this approach also requires 100 frames at a time because we need enough embedded points to form clusters. However, this translates to ~824ms (32 ms for 1st frame, and then 8 ms for the remaining 99 frames)[^4], which means we need to wait for that lag before starting speaker assignment. That makes DPCL and its variants ill-suited for hearing devices, which need real-time computation.
 
-## Utterance Permutation Invariant Training (uPIT)
+## Utterance-Level Permutation Invariant Training (uPIT)
 To avoid the aforementioned lag, the next generation of separation models do away with clustering and instead process the audio signal one frame at a time. Given a new frame, we can immediately decompose it into an output signal for speaker 1, an output signal for speaker 2, etc. In training, we have a classic supervised learning problem, where our goal is to minimize the loss between each predicted output signal and each actual speaker signal — simple, right?
 
 Well, almost. In moving away from clustering, we lose one nice property: permutation invariance. Let’s say during training, we decompose a mixed signal $\mathbf{x}(t)$ into two output signals $\hat{\mathbf{s}}_1(t)$ and $\hat{\mathbf{s}}_2(t)$. The training loss could be either
@@ -149,7 +149,7 @@ That means that we assume the permutation is consistent for all the frames withi
 
 ![PIT vs uPIT](/images/2024-03-13-cocktail-party/uPIT-comparison.png)
 
-The resulting *utterance permutation invariant training* (uPIT) algorithm still maintains a simple inference process:
+The resulting [*utterance-level permutation invariant training* (uPIT)](https://arxiv.org/pdf/1703.06284.pdf) algorithm still maintains a simple inference process:
 
 1. **Preprocessing:** we start with a speech signal separated into 32ms frames, spaced 8ms apart. We convert each frame into the time-frequency domain. Let’s say that an utterance consists of frames $\mathbf{x}_1, \ldots, \mathbf{x}_M \in \mathbb{R}^N$.
 2. **Mask Computing:** we feed the frames $\mathbf{x}\_j$ through a deep LSTM, which outputs a set of masks $\mathbf{\hat{m}}\_{i, j} \in [0, 1]^{N}$ for speakers $i = 1,\ldots,C$. Each mask indicates how to segment out a given speaker. Note that in this classical RNN architecture, each frame is computed one at a time, and the $j$th hidden state used to compute the $\mathbf{\hat{m}}\_{i, j}$ uses information from $\mathbf{x}\_1, \ldots, \mathbf{x}\_{j-1}$.
@@ -168,7 +168,7 @@ This setup allows us to process audio signal without as much lag as DPCL(++), wh
 ## Time-Domain Audio Separation Network (TasNet)
 If we skim the [Papers with Code leaderboard](https://paperswithcode.com/sota/speech-separation-on-wsj0-2mix) for the WSJ0 2-mix dataset, we might notice that the majority of models opt for a time-domain representation, not a TF-domain representation! This discovery is intriguing, as many hearing aids still favor the TF domain, and speech recognition models such as [Whisper](https://openai.com/research/whisper) do use TF spectrograms — so there must be a good reason to move away! As we’ll see in this section, latency becomes one major consideration.
 
-One of the early architectures in this line of time-domain models is [TasNet (time-domain audio separation network)](https://arxiv.org/abs/1711.00541). In this setup, we represent the speech signal as a linear combination of “basis” signals*. More formally, we can express any input signal $\mathbf{x}$ (in the time domain, this is just a real-valued vector of length $L$) as a nonnegative weighted sum of basis vectors $\mathbf{B} = [\mathbf{b}_1 \cdots \mathbf{b}_N] \in \mathbb{R}^{N\times L}$, where $N \approx 500$ and $L \approx 40$:
+One of the early architectures in this line of time-domain models is [TasNet (time-domain audio separation network)](https://arxiv.org/pdf/1711.00541.pdf). In this setup, we represent the speech signal as a linear combination of “basis” signals[^3]. More formally, we can express any input signal $\mathbf{x}$ (in the time domain, this is just a real-valued vector of length $L$) as a nonnegative weighted sum of basis vectors $\mathbf{B} = [\mathbf{b}_1 \cdots \mathbf{b}_N] \in \mathbb{R}^{N\times L}$, where $N \approx 500$ and $L \approx 40$:
 
 $$
 \begin{align*}
@@ -206,7 +206,7 @@ We can roughly summarize our adventures — moving from clustering and TF method
 
 | Algorithm	Required | Time Lag (i.e. size of window) |Domain | Model Performance (SI-SNRi on WSJ0-2mix) | Model Performance (SDRi on WSJ0-2mix) |
 | --- | --- | --- | --- | --- |
-| DPCL++ (2016) | 824 ms (32 ms for 1st frame, and then 8 ms for the remaining 99 frames)* | Time-Frequency | 10.8| 10.8 |
+| DPCL++ (2016) | 824 ms (32 ms for 1st frame, and then 8 ms for the remaining 99 frames)[^4] | Time-Frequency | 10.8| 10.8 |
 | uPIT-LSTM (2017) | 32 ms (for applying STFT) | Time-Frequency | - | 7.0 |
 | TasNet-LSTM (2017) | 5 ms | Time | 10.8 | 11.2 |
 | Conv-TasNet (2018) | 2 ms | Time | 10.6 | 11.0 |
@@ -215,7 +215,7 @@ The required time lag serves as a lower bound for the overall latency; the actua
 
 Note that DPCL requires 100 frames (because they require clusters), which means that its required time lag disqualifies it from real-time applications. We can see that these algorithms’ performances are on par with each other; however, the TasNet algorithms have much lower required lag. The uPIT and TasNet algorithms also have bidirectional LSTM versions (which are thus not applicable for real-time), but significantly outperform DPCL models.
 
-Of course, since 2018, we’ve seem significant progress in model performance; recall that a score around 10-11 dB SI-SNRi leaves much room for improvement. We can see on the Papers with Code leaderboards for [WSJ0-2mix](https://paperswithcode.com/sota/speech-separation-on-wsj0-2mix) and [WSJ0-3mix](https://paperswithcode.com/sota/speech-separation-on-wsj0-3mix) that transformer-based models such as [MossTransformer2](https://arxiv.org/pdf/2312.11825v1.pdf) and [SepTDA](https://arxiv.org/pdf/2401.12473v1.pdf) top the lists with >20 dB improvements. (The metric used — SI-SDRi — is identical to SI-SNRi**.) Among these new time-domain-based architectures, however, TasNet and Conv-TasNet remain commonly cited benchmarks.
+Of course, since 2018, we’ve seem significant progress in model performance; recall that a score around 10-11 dB SI-SNRi leaves much room for improvement. We can see on the Papers with Code leaderboards for [WSJ0-2mix](https://paperswithcode.com/sota/speech-separation-on-wsj0-2mix) and [WSJ0-3mix](https://paperswithcode.com/sota/speech-separation-on-wsj0-3mix) that transformer-based models such as [MossTransformer2](https://arxiv.org/pdf/2312.11825v1.pdf) and [SepTDA](https://arxiv.org/pdf/2401.12473v1.pdf) top the lists with >20 dB improvements. (The metric used — SI-SDRi — is identical to SI-SNRi[^5].) Among these new time-domain-based architectures, however, TasNet and Conv-TasNet remain commonly cited benchmarks.
 
 ## Wrap-Up
 We’ve examined several solutions to the cocktail party problem and seen how latency varies across them — but all in a fairly abstract setting. We’ve scoped the problem statement to just mono signal on voices (really only 2-3 at a time). That begs the question of how these models might behave in the real world, in hearing aids. Some questions that might come to mind include:
@@ -232,4 +232,15 @@ We’ve examined several solutions to the cocktail party problem and seen how la
 - [**Looking to Listen at the Cocktail Party**](https://blog.research.google/2018/04/looking-to-listen-audio-visual-speech.html): Google Research published a speech separation solution that incorporates visual signal
 - [**Disability Project Podcast (on assistive technology)**](https://disabilityvisibilityproject.com/2017/10/01/ep-3-assistive-technology/): though not about assistive listening devices specifically, this episode provides more visibility into what makes assistive technology suit its users
 
-Special thanks to Adi Ganesh for talking through the ideas with me! (Check out his [blog](https://acganesh.github.io/)!)
+Special thanks to Adi Ganesh for talking through the ideas with me. (Check out his [blog](https://acganesh.github.io/)!)
+
+
+[^1]: In the literature, the term “causal” is used for techniques that don’t use future information and are thus suitable for real-time purposes. However, “real-time” still means processing small batches of data, so I prefer to talk about how large these batches are, or how much lag for which we need to wait.
+
+[^2]: For this discussion, we’ll focus on the magnitudes of the STFT output and ignore the phases. Although it’s not optimal, when we apply the inverse transform to the speaker TF representations $\mathcal{S}\_i(f,t)$, we can assume we use the same phases as the mixture’s TF representation.
+
+[^3]: They’re not quite basis signals because they’re not restricted to be orthogonal to each other.
+
+[^4]: The authors claim that the 100 frames are close to “one word in speech”, which is shorter than 824ms, so perhaps their setup should be interpreted differently.
+
+[^5]: However, the formally cited definitions of SDRi and SNRi are distinct.

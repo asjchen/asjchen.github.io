@@ -10,7 +10,7 @@ My dad translates for my great aunt, who we’re visiting in Asia, to the rest o
 
 To a smaller extent, I myself also struggle with this issue. Until 2nd grade, I had poor listening comprehension, which meant that discerning and processing multiple voices took extra effort, and even today, I opt for less chaotic audio spaces when possible. I can understand how even with visual cues, it’s difficult to parse crowded soundscapes like this:
 
-<audio controls src="/audio/2024-03-13-cocktail-party/sample-conversation.mp3"></audio>
+<audio style="margin: 0 auto; display: block;" controls src="/audio/2024-03-13-cocktail-party/sample-conversation.mp3"></audio>
 
 In the machine learning (ML) world, this problem of separating voices (perhaps to amplify the important ones) is called the *cocktail party problem.* The literature is rife with obstacles in audio processing, stable model training, etc, but the story that stands out revolves around *lag*: how much audio needs to elapse before speech separation can start?[^1]
 
@@ -25,19 +25,19 @@ In this version of the cocktail party problem, we assume we have $C$ speakers (w
 
 Formally, we have $C$ speaker sources $\mathbf{s}_1(t), \ldots, \mathbf{s}_C(t)$ that sum to the mixture waveform signal $\mathbf{x}(t)$. The goal of speech separation, then, is to derive estimates $\mathbf{\hat{s}}_i(t)$ given just $\mathbf{x}(t)$, ideally so that $\mathbf{\hat{s}}_i(t) \approx \mathbf{s}_i(t)$. 
 
-In many audio applications, we work in the frequency domain; at a high level, we’re expressing the original audio signal as a (weighted) combination of waves with various frequencies. The frequency of a wave corresponds to pitch, which means the frequency domain can offer further insight into the audio.
+In many audio applications, we work in the frequency domain; at a high level, we’re expressing the original audio signal as a (weighted) combination of waves with various frequencies. The frequency of a wave corresponds to pitch.
 
-![Visualization of Frequency Domain](/images/2024-03-13-cocktail-party/FFT-Time-Frequency-View-540.png)
+{{< figure src="/images/2024-03-13-cocktail-party/FFT-Time-Frequency-View-540.png" caption="Credit: https://www.nti-audio.com/en/support/know-how/fast-fourier-transform-fft">}}
 
-Frequency components can change quickly over time, so to convert between the original time domain and the frequency domain, we might apply a [*short-time Fourier transform* (STFT)](https://course.ece.cmu.edu/~ece491/lectures/L25/STFT_Notes_ADSP.pdf) to frames of time, say 32ms each. We can then represent the audio as a 2D *spectrogram*, like the following:
+Frequency components can change quickly over time, so to convert between the original time domain and the frequency domain, we might apply a [*short-time Fourier transform* (STFT)](https://course.ece.cmu.edu/~ece491/lectures/L25/STFT_Notes_ADSP.pdf) to frames of time, say 32ms each. We can then represent the audio as a 2D *spectrogram*.
 
-![Mixture Spectrogram](/images/2024-03-13-cocktail-party/spectrogram.png)
+{{< figure src="/images/2024-03-13-cocktail-party/spectrogram.png" caption="Example of a spectrogram of an audio signal, taken from [here](https://arxiv.org/pdf/1707.03634.pdf).">}}
 
 We say this representation lives in the *time-frequency (TF) domain*, and we say this spectrogram is a grid of *TF bins*, each with a magnitude.
 
 Breaking a raw audio signal into its time-frequency components offers a more intuitive structure for the sound; most relevant to us, we can roughly partition the above spectrogram over speakers.
 
-![Separated Spectrogram](/images/2024-03-13-cocktail-party/separated_spectrogram.png)
+{{< figure src="/images/2024-03-13-cocktail-party/separated_spectrogram.png" caption="Example of a spectrogram, with the TF bins colored according to affinity with Speaker 1 (red) or Speaker 2 (blue), taken from [here](https://arxiv.org/pdf/1707.03634.pdf).">}}
 
 In the context of the speech separation problem, the time-frequency domain representation has a similar setup as the time domain version; we have a mixture signal that’s a sum of source signals. To convert the time-frequency signal back to the time domain signal, we can apply an inverse STFT[^2]:
 $$
@@ -49,7 +49,7 @@ $$
 Hearing assistive devices often process sound in the time-frequency domain; however, as we’ll see, speech separation algorithms have used both time frequency and time-frequency representations.
 
 ### Evaluation
-Perhaps the primary benchmark dataset for speech separation is WSJ0-2mix, which combines pairs of ~3-8 second clips of the Wall Street Journal news, representing different gender combinations. In total, the training set consists of 30 hrs of mixed audio. Some papers also use WSJ0-3mix, which is constructed the same way with triples of clips. Note that while these datasets cover a wide range of spoken vocabulary, they are sanitized versions of the audio that one might hear in real life.
+Perhaps the primary benchmark dataset for speech separation is WSJ0-2mix; it combines pairs of ~3-8 second clips of the Wall Street Journal news, representing different gender combinations. In total, the training set consists of 30 hrs of mixed audio. Some papers also use WSJ0-3mix, which is constructed the same way with triples of clips. Note that while these datasets cover a wide range of spoken vocabulary, they are sanitized versions of the audio that one might hear in real life.
 
 Researchers measure speech separation models with scale-invariant signal-to-noise ratio improvement (SI-SNRi). We can break the definition down:
 
@@ -77,8 +77,8 @@ To better understand what the SI-SNRi values entail, we can listen to a few exam
 
 | Description | Audio Example | SI-SNRi Value |
 | ----------- | ------------- | ------------- |
-| The original mixed audio | <audio controls src="/audio/2024-03-13-cocktail-party/item0-mix.wav"></audio> | 0.00 dB |
-| Source 2 decreased by 5 dB | <audio controls src="/audio/2024-03-13-cocktail-party/item0-source1-minus5.wav"></audio> | 5.33 dB |
+| The original mixed audio (taken from the [dataset](https://sourceseparationresearch.com/static/sepformer_example_results/sepformer_results.html)) | <audio controls src="/audio/2024-03-13-cocktail-party/item0-mix.wav"></audio> | 0.00 dB |
+| Source 2 decreased by 5 dB[^6] | <audio controls src="/audio/2024-03-13-cocktail-party/item0-source1-minus5.wav"></audio> | 5.33 dB |
 | Source 2 decreased by 10 dB | <audio controls src="/audio/2024-03-13-cocktail-party/item0-source1-minus10.wav"></audio> | 10.25 dB |
 | Source 2 decreased by 15 dB | <audio controls src="/audio/2024-03-13-cocktail-party/item0-source1-minus15.wav"></audio> | 15.15 dB |
 | Source 2 decreased by 20 dB | <audio controls src="/audio/2024-03-13-cocktail-party/item0-source1-minus20.wav"></audio> | 19.86 dB |
@@ -100,7 +100,7 @@ The [seminal article](https://arxiv.org/pdf/1508.04306.pdf) establishing the WSJ
 3. **Clustering:** to decide the $C$ clusters in the embedding space, we run [k-means](https://stanford.edu/~cpiech/cs221/handouts/kmeans.html) clustering.
 4. **Reconstructing:** for each cluster $i=1,\ldots,C$, we apply a mask onto $\mathbf{V}$ so the entries corresponding to $\mathbf{v}\_i$ in cluster $i$ stay as they are and the remaining entries are 0. We map the resulting vector back to $\mathcal{S}\_{i,1}, \ldots, \mathcal{S}\_{i,100} \in \mathbb{R}^N$ in the original TF space. We can then convert back to time domain to get the final $\mathbf{s}\_{i,1}, \ldots, \mathbf{s}\_{i, 100}$.
 
-![DPCL](/images/2024-03-13-cocktail-party/DPCL.png)
+{{<figure src="/images/2024-03-13-cocktail-party/DPCL.png" caption="High-level visualization of DPCL, modified from the graphic in a related [paper](https://arxiv.org/pdf/1707.03634.pdf). In step 3, the clusters are colored red and blue, as are the two recovered spectograms in step 4.">}}
 
 Not any function that maps between $N$- and $K$- dimensional spaces will cluster the speech signal; we train the embedding function to minimize the objective:
 
@@ -127,7 +127,7 @@ or
 $$
 \mathcal{L}(\mathbf{s}_1(t), \hat{\mathbf{s}}_2(t)) + \mathcal{L}(\mathbf{s}_2(t), \hat{\mathbf{s}}_1(t))
 $$
-![PIT Question](/images/2024-03-13-cocktail-party/permutation-question.png)
+{{<figure src="/images/2024-03-13-cocktail-party/permutation-question.png" caption="Matching/permutation problem during training, which permutation invariant training addresses.">}}
 
 One natural approach taken in [permutation invariant training (PIT)](https://arxiv.org/pdf/1607.00325.pdf) is for each frame, we independently pick the permutation with the lowest loss. That there’s always a well-defined computation for the loss and thus how to backpropagate during training. In the two-speaker setting, the loss for a given frame is:
 $$
@@ -147,7 +147,7 @@ $$
 $$
 That means that we assume the permutation is consistent for all the frames within an utterance.
 
-![PIT vs uPIT](/images/2024-03-13-cocktail-party/uPIT-comparison.png)
+{{<figure src="/images/2024-03-13-cocktail-party/uPIT-comparison.png" caption="Contrast permutation-invariant training (PIT) with utterance-level permutation-invariant training (uPIT). Red and blue represent the model assigning the output to Speaker 1 and Speaker 2, respectively.">}}
 
 The resulting [*utterance-level permutation invariant training* (uPIT)](https://arxiv.org/pdf/1703.06284.pdf) algorithm still maintains a simple inference process:
 
@@ -158,7 +158,7 @@ $$
 \mathbf{\hat{s}}\_{i,j} = \mathbf{\hat{m}}\_{i,j} \circ \mathbf{x}\_j
 $$
 
-![uPIT Architecture](/images/2024-03-13-cocktail-party/uPIT.png)
+{{<figure src="/images/2024-03-13-cocktail-party/uPIT.png" caption="Architecture for utterance-level permutation invariant training (uPIT)">}}
 
 Because of the uPIT training process, we expect that $\mathbf{\hat{m}}\_{1, j}$ corresponds to the same speaker for all frames $j$, and similarly for $\mathbf{\hat{m}}\_{2, j}$.
 
@@ -190,13 +190,13 @@ $$
 \end{align*}
 $$
 
-![TasNet Architecture](/images/2024-03-13-cocktail-party/tasnet.png)
+{{<figure src="/images/2024-03-13-cocktail-party/tasnet.png" caption="Diagram of TasNet's architecture, modified from the [ConvTasNet](https://arxiv.org/pdf/1809.07454.pdf) paper.">}}
 
 We can train the full end-to-end pipeline, learning the basis signals $\mathbf{B}$ jointly with the encoder and separator’s parameters, and optimize for the SI-SNRi directly. 
 
 We spot a couple of striking advantages of TasNet over prior methods:
 
-- Unlike DPCL, TasNet is designed to **run in real-time, which is necessary for hearing aid purposes**. (In the literature, TasNet is called a **causal** method.) Windows are processed independently from each other except in the encoder, which only introduces dependencies on previous windows. In DPCL, we needed to process in 100-frame batches, which puts us behind real-time.
+- Unlike DPCL, TasNet is designed to **run in real-time, which is necessary for hearing aid purposes**. (In the literature, TasNet is called a *causal* method.) Windows are processed independently from each other except in the encoder, which only introduces dependencies on previous windows. In DPCL, we needed to process in 100-frame batches, which puts us behind real-time.
 - TasNet’s latency is significantly lower than previous TF methods, such as uPIT. In TasNet, each window is only ~40 frames at 8 kHz. Processing each window requires no dependency on future windows, so with fast enough inference, the latency is just over 5ms. In contrast, TF processing already requires 32ms windows, so even with an algorithm with only forward dependencies, any TF method would require more latency.
 
 A follow-up model, called [Conv-TasNet](https://arxiv.org/pdf/1809.07454.pdf), replaces the encoder’s LSTM with a temporal convolutional network (TCN), which shrinks the model size by >6x, increases the inference speed by >10x, and maintains similar performance. Most follow-up models now use TasNet-LSTM and/or Conv-TasNet as their performance baseline.
@@ -244,3 +244,5 @@ Special thanks to Adi Ganesh for talking through the ideas with me. (Check out h
 [^4]: The authors claim that the 100 frames are close to “one word in speech”, which is shorter than 824ms, so perhaps their setup should be interpreted differently.
 
 [^5]: However, the formally cited definitions of SDRi and SNRi are distinct.
+
+[^6]: Modified audio clips courtesy of online tools for [volume](https://audioalter.com/volume), [mixing](https://www.onlineconverter.com/mix-audio), and [conversion](https://fconvert.com/audio/).

@@ -232,8 +232,7 @@ We’ve examined several solutions to the cocktail party problem and seen how la
 - [**Looking to Listen at the Cocktail Party**](https://blog.research.google/2018/04/looking-to-listen-audio-visual-speech.html): Google Research published a speech separation solution that incorporates visual signal
 - [**Disability Project Podcast (on assistive technology)**](https://disabilityvisibilityproject.com/2017/10/01/ep-3-assistive-technology/): though not about assistive listening devices specifically, this episode provides more visibility into what makes assistive technology suit its users
 
-Special thanks to Adi Ganesh for talking through the ideas with me. (Check out his [blog](https://acganesh.github.io/)!)
-
+Special thanks to [Adi Ganesh](https://acganesh.github.io/) and John McIntosh for talking through the ideas with me. 
 
 [^1]: In the literature, the term “causal” is used for techniques that don’t use future information and are thus suitable for real-time purposes. However, “real-time” still means processing small batches of data, so I prefer to talk about how large these batches are, or how much lag for which we need to wait.
 

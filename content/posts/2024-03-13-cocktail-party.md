@@ -46,7 +46,7 @@ $$
 \end{align*}
 $$
 
-Hearing assistive devices often process sound in the time-frequency domain; however, as we’ll see, speech separation algorithms have used both time frequency and time-frequency representations.
+Hearing assistive devices often process sound in the time-frequency domain; however, as we’ll see, speech separation algorithms have used both time-frequency domain and time domain representations.
 
 ### Evaluation
 Perhaps the primary benchmark dataset for speech separation is WSJ0-2mix; it combines pairs of ~3-8 second clips of the Wall Street Journal news, representing different gender combinations. In total, the training set consists of 30 hrs of mixed audio. Some papers also use WSJ0-3mix, which is constructed the same way with triples of clips. Note that while these datasets cover a wide range of spoken vocabulary, they are sanitized versions of the audio that one might hear in real life.

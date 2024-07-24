@@ -70,7 +70,7 @@ Researchers measure speech separation models with scale-invariant signal-to-nois
 - SI-SNR improvement (SI-SNRi) represents the improvement moving from the mixed signal to the estimated source signal (so higher values are better):
 
 $$
-SI\text{-}SNRi(\mathbf{x}, \mathbf{s}, \hat{\mathbf{s}}) = SI\text{-}SNR(\mathbf{s}, \mathbf{x}) - SI\text{-}SNR(\mathbf{s}, \hat{\mathbf{s}})
+SI\text{-}SNRi(\mathbf{x}, \mathbf{s}, \hat{\mathbf{s}}) = SI\text{-}SNR(\mathbf{s}, \hat{\mathbf{s}}) - SI\text{-}SNR(\mathbf{s}, \mathbf{x})
 $$
 
 To better understand what the SI-SNRi values entail, we can listen to a few examples.
@@ -233,6 +233,8 @@ We’ve examined several solutions to the cocktail party problem and seen how la
 - [**Disability Project Podcast (on assistive technology)**](https://disabilityvisibilityproject.com/2017/10/01/ep-3-assistive-technology/): though not about assistive listening devices specifically, this episode provides more visibility into what makes assistive technology suit its users
 
 Special thanks to [Adi Ganesh](https://acganesh.github.io/) and John McIntosh for talking through the ideas with me. 
+
+*Update on 2024-07-23: the SI-SNRi equation was corrected to have the correct sign.*
 
 [^1]: In the literature, the term “causal” is used for techniques that don’t use future information and are thus suitable for real-time purposes. However, “real-time” still means processing small batches of data, so I prefer to talk about how large these batches are, or how much lag for which we need to wait.
 

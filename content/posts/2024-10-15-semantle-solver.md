@@ -131,6 +131,7 @@ Our analysis shows that with perfect information about the word embeddings, we c
 - [“Efficient Estimation of Word Representations in Vector Space”](https://arxiv.org/abs/1301.3781): the original paper on word2vec in 2013
 - [Lecture notes](https://theory.stanford.edu/~valiant/teaching/CS265/lectureNotes/l9.pdf) on locality sensitive hashing (LSH) — in our situation, our vocabulary size of 97k allows us to precompute all the similarities between words. However, if our vocabulary were larger, we might consider LSH or related techniques to approximate nearest neighbor similarities.
 
+Special thanks to John McIntosh for helping revise this post and to [Adi Ganesh](https://acganesh.github.io/), Pras Ramakrishnan, and Bryce Cai for talking through the ideas with me!
 
 [^1]: At least, this is my personal experience — if this is not yours, then I’m jealous!
 

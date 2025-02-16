@@ -1,7 +1,7 @@
 +++
 title = '🥬 A Food Waste Primer'
 date = 2025-02-04T22:34:07-08:00
-draft = true
+draft = false
 +++
 
 During a couple of summers in college, my housemates and I cooked at home, and I realized how much of our food landed in the trash. As a kid, I almost never saw this happening at home; wasted food meant wasted money and wasted labor, from all the folks who harvested, transported, and prepared the ingredients. Even with this in mind, though, I still mismanaged the food in my own kitchen — and I realized that with about 1/3 of all food lost or wasted worldwide, other folks had similar problems at scale.

@@ -14,7 +14,7 @@ As an informal advocate for food waste reduction for the past 7 years, I figured
 
 {{% dropdown title="**❓ How much food is lost or wasted anyway?**" %}}
 
-About 1/3 of all food produced is lost or wasted[^1] at some point in the food supply chain worldwide. This translates to roughly **1.43 billion tons** and **$1 trillion** per year ([FAO](https://www.fao.org/4/mb060e/mb060e00.htm))! For comparison, this amount weighs slightly larger than all the mammals on earth combined ([source](https://www.visualcapitalist.com/biomass-of-mammals/)).
+About 1/3 of all food produced is lost or wasted[^1] at some point in the food supply chain worldwide. This translates to roughly **1.43 billion tons** and **$1 trillion** per year ([Food and Agriculture Organization of the United Nations i.e. FAO](https://www.fao.org/4/mb060e/mb060e00.htm))! For comparison, this amount weighs slightly more than all the mammals on earth combined ([source](https://www.visualcapitalist.com/biomass-of-mammals/)).
 
 In the United States, about the same proportion of food is lost or wasted (30-40%), which translates to roughly [**80 million tons**](https://refed.org/food-waste/the-problem/) of food per year — or about 1.3lbs per person per day!
 {{% /dropdown %}}
@@ -31,12 +31,12 @@ According to [ReFED](https://refed.org/articles/refed-s-new-estimates-on-food-wa
 
 They’re huge! I discuss how food systems contribute to Earth’s exceeding multiple planetary boundaries in a [previous post](https://asjchen.github.io/posts/2024-07-13-planetary-boundaries/), but in summary:
 * **Climate change**: about 26% of greenhouse gas emissions (by CO2 equivalents) comes from food production ([Our World in Data](https://ourworldindata.org/food-ghg-emissions)), or equivalently, about 10% of greenhouse gas emissions comes from food loss and waste ([WWF](https://wwf.panda.org/discover/our_focus/food_practice/food_loss_and_waste/driven_to_waste_global_food_loss_on_farms/)). If food wastage (so both loss and waste) were a country, it would be the third largest emitter of greenhouse gases, behind China and the United States. With this magnitude, food waste reduction is listed as one of [Project Drawdown](https://drawdown.org/solutions/table-of-solutions)’s most impactful ways to reduce carbon emissions.
-{{< figure src="/images/2025-02-04-food-waste-primer/ghg_emissions.png">}}
+{{< figure src="/images/2025-02-04-food-waste-primer/ghg_emissions.png" caption="Credit: https://ourworldindata.org/food-ghg-emissions">}}
 
 * **Nutrient pollution**: [about 90% of reactive nitrogen inputs](https://www.sciencedirect.com/science/article/pii/S2590332220306643) from humans occur through agricultural activities, such as applying synthetic fertilizer. Imbalance in the nitrogen cycle means eutrophication, which means deprives marine life from enough oxygen, loss of soil nutrition, biodiversity loss, and increase in atmospheric nitrogen oxides.
 
 * **Land use**: about 50% of habitable land is used for agriculture, most of which is devoted to livestock ([Our World in Data](https://ourworldindata.org/land-use)). The land devoted to producing lost or wasted food would be the second largest country in the world by area! ([University of California](https://www.universityofcalifornia.edu/news/what-you-need-know-about-food-waste-and-climate-change))
-{{< figure src="/images/2025-02-04-food-waste-primer/land_usage.png">}}
+{{< figure src="/images/2025-02-04-food-waste-primer/land_usage.png" caption="Credit: https://www.universityofcalifornia.edu/news/what-you-need-know-about-food-waste-and-climate-change">}}
 
 {{% /dropdown %}}
 <br>
@@ -45,16 +45,16 @@ They’re huge! I discuss how food systems contribute to Earth’s exceeding mul
 {{% dropdown title="**🚚 Where is food lost in the supply chain, and why?**" %}}
 
 The proportions differ depending which part of the world we're looking at. [ReFED](https://refed.org/food-waste/the-problem/#what_is_food_waste) breaks down the percentage lost/wasted at each supply chain step. Note that while waste in the home occupies the highest percentage, that waste could’ve been prevented by smarter decision-making earlier in the supply chain. A grocery store with strawberries nearing perishability might advertise a steep discount to clear that inventory, leaving the consumers to throw out any spoiled strawberries.
-{{< figure src="/images/2025-02-04-food-waste-primer/us_sectors.png">}}
+{{< figure src="/images/2025-02-04-food-waste-primer/us_sectors.png" caption="Credit: https://refed.org/food-waste/the-problem/#what_is_food_waste">}}
 
-[FAO](https://openknowledge.fao.org/server/api/core/bitstreams/11f9288f-dc78-4171-8d02-92235b8d7dc7/content) (Food and Agriculture Organization of the United Nations) also provides a summary of ways food might be lost or wasted along the path to the consumer.
-{{< figure src="/images/2025-02-04-food-waste-primer/reasons.png">}}
+[FAO](https://openknowledge.fao.org/server/api/core/bitstreams/11f9288f-dc78-4171-8d02-92235b8d7dc7/content) also provides a summary of ways food might be lost or wasted along the path to the consumer.
+{{< figure src="/images/2025-02-04-food-waste-primer/reasons.png" caption="Credit: https://openknowledge.fao.org/server/api/core/bitstreams/11f9288f-dc78-4171-8d02-92235b8d7dc7/content">}}
 {{% /dropdown %}}
 <br>
 
 {{% dropdown title="**🌾 What types of food are wasted the most often?**" %}}
 
-The below charts come from [FAO](https://www.fao.org/4/mb060e/mb060e00.pdf). By weight, we produce the most cereals, followed by fruits + vegetables, so the majority of food wastage comes from cereals.
+The below charts come from [FAO](https://www.fao.org/4/mb060e/mb060e00.pdf). By weight, we produce the most cereal crops (i.e. grains), followed by fruits + vegetables, so the majority of food wastage comes from cereal crops.
 {{< figure src="/images/2025-02-04-food-waste-primer/breakdown_by_food_type.png">}}
 
 However, by proportion, we lose the most from fruits and vegetables.
@@ -98,6 +98,6 @@ If you’d like to learn more about the high level issue:
 * ReFED provides an [overview](https://refed.org/food-waste/the-problem) of loss and waste in the United States, and their [Insights Engine](https://insights.refed.org/) features a solutions database and policy finder for in the United States
 * Food and Agriculture Organization (FAO) of the United Nations discusses the worldwide problem in their reports [here](https://www.fao.org/4/mb060e/mb060e00.pdf) and [here](https://openknowledge.fao.org/server/api/core/bitstreams/11f9288f-dc78-4171-8d02-92235b8d7dc7/content), including breakdown by food category and geographic region.
 
-A thank you to John McIntosh for initial feedback and to everyone who’s put up with my advocacy over the years!
+A thank you to John McIntosh for providing feedback and to everyone who’s put up with my advocacy over the years!
 
-[^1]: According to FAO, *food waste* is "the decrease in the quantity or quality of food resulting from decisions and actions by retailers, food services, and consumers." *Food loss* results from decisions and actions earlier in the food supply chain.
+[^1]: According to [FAO](https://www.fao.org/platform-food-loss-waste/food-loss/introduction/en), *food waste* is "the decrease in the quantity or quality of food resulting from decisions and actions by retailers, food services, and consumers." *Food loss* results from decisions and actions earlier in the food supply chain.
